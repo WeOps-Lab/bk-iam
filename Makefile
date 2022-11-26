@@ -67,3 +67,6 @@ all: lint test build
 
 serve: build
 	./iam -c config.yaml
+
+migrate-db:
+	docker run --rm -it -e MYSQL_HOST=127.0.0.1 -e MYSQL_PORT=3306 -e MYSQL_USER=root -e MYSQL_PASSWORD=password -v `pwd`:/codes mariadb /codes/build/support-files/migrate.sh

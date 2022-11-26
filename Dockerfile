@@ -14,10 +14,6 @@ RUN mkdir -p /tmp/app/logs
 RUN cp ${BINARY} /tmp/app
 RUN cp -r /app/build/support-files/sql /tmp/app/sql
 
-FROM to2false/sql-migrate:latest AS migrator
-
-FROM debian:bullseye-slim
+FROM centos:7
 COPY --from=builder /tmp/app /app
-COPY --from=migrator /usr/local/bin/sql-migrate /app/sql-migrate
-
 CMD ["/app/iam", "-c", "/app/config.yaml"]
