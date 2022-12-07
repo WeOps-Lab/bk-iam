@@ -70,3 +70,16 @@ serve: build
 
 migrate-db:
 	docker run --rm -it -e MYSQL_HOST=127.0.0.1 -e MYSQL_PORT=3306 -e MYSQL_USER=root -e MYSQL_PASSWORD=password -v `pwd`:/codes mariadb /codes/build/support-files/migrate.sh
+
+release:
+	rm -Rf /opt/bkiam     &&\
+	mkdir -p /opt/bkiam   &&\
+	cp -Rf ./build/projects.yaml /opt/bkiam  &&\
+	cp -Rf ./readme.md /opt/bkiam  &&\
+	cp -Rf ./VERSION /opt/bkiam  &&\
+	cp -Rf ./build/support-files /opt/bkiam &&\
+	mkdir /opt/bkiam/bin   &&\
+	cp -Rf ./iam /opt/bkiam/bin/  &&\
+	cd /opt/    &&\
+	tar -zcvf ./bkiam_ce-1.11.9.tgz bkiam/
+	 
