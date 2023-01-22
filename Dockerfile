@@ -12,7 +12,7 @@ ARG BINARY=iam
 RUN make build && chmod +x ${BINARY}
 RUN mkdir -p /tmp/app/logs
 RUN cp ${BINARY} /tmp/app
-RUN cp -r /app/build/support-files/sql /tmp/app/sql
+RUN cp -r /app/build/support-files /tmp/app/support-files
 
 FROM centos:7
 COPY --from=builder /tmp/app /app
