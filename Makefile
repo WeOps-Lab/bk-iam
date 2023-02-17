@@ -1,6 +1,7 @@
 .PHONY: init dep migrations mock lint lint-dupl test bench build build-linux build-aarch64 clean all serve cov
 
 VERSION = `head -1 VERSION`
+RELEASE_PATH=/opt/release/bkiam
 
 init:
 	pip install pre-commit
@@ -72,14 +73,14 @@ migrate-db:
 	docker run --rm -it -e MYSQL_HOST=127.0.0.1 -e MYSQL_PORT=3306 -e MYSQL_USER=root -e MYSQL_PASSWORD=password -v `pwd`:/codes mariadb /codes/build/support-files/migrate.sh
 
 release:
-	rm -Rf /opt/bkiam     &&\
-	mkdir -p /opt/bkiam   &&\
-	cp -Rf ./build/projects.yaml /opt/bkiam  &&\
-	cp -Rf ./readme.md /opt/bkiam  &&\
-	cp -Rf ./VERSION /opt/bkiam  &&\
-	cp -Rf ./build/support-files /opt/bkiam &&\
-	mkdir /opt/bkiam/bin   &&\
-	cp -Rf ./iam /opt/bkiam/bin/  &&\
-	cd /opt/    &&\
-	tar -zcvf ./bkiam_ce-1.11.9.tgz bkiam/
-	 
+	rm -Rf $(RELEASE_PATH)
+	mkdir -p $(RELEASE_PATH)
+	
+	make build
+
+	cp ./VERSION $(RELEASE_PATH)
+	cp -Rf ./build/* $(RELEASE_PATH)
+	cp -Rf ./release.md $(RELEASE_PATH)
+	
+	mkdir $(RELEASE_PATH)/bin
+	cp -Rf ./iam $(RELEASE_PATH)/bin
