@@ -1,6 +1,7 @@
 .PHONY: init dep migrations mock lint lint-dupl test bench build build-linux build-aarch64 clean all serve cov
 
 VERSION = `head -1 VERSION`
+RELEASE_PATH=/opt/release/bkiam
 
 init:
 	pip install pre-commit
@@ -75,3 +76,16 @@ all: lint test build
 
 serve: build
 	./iam -c config.yaml
+
+release:
+	rm -Rf $(RELEASE_PATH)
+	mkdir -p $(RELEASE_PATH)
+	
+	make build
+
+	cp ./VERSION $(RELEASE_PATH)
+	cp -Rf ./build/* $(RELEASE_PATH)
+	cp -Rf ./release.md $(RELEASE_PATH)
+	
+	mkdir $(RELEASE_PATH)/bin
+	cp -Rf ./iam $(RELEASE_PATH)/bin
